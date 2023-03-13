@@ -103,7 +103,7 @@ def move_from_close_bigger_snake(board, head, new_head, length):
             closest_snake = s
             continue
 
-        if abs(s.head.x - head.x) + abs(s.head.y - head.y) < abs(s.head.x - closest_snake.head.x) + abs(s.head.y - closest_snake.head.y):
+        if abs(s.head.x - head.x) + abs(s.head.y - head.y) < abs(closest_snake.head.x - head.x) + abs(closest_snake.head.y - head.y):
             closest_snake = s
 
     if closest_snake.length < length:
