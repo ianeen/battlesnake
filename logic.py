@@ -31,11 +31,11 @@ def find_best_next_space(board, you, need_food=False):
                 move_score += 100
             else:
                 move_score -= 50
-        elif new_head in board.hazards:
-            move_score -= 100
         elif new_head in new_body:
             move_score -= 100
         elif check_out_of_bounds(board, new_head):
+            move_score -= 100
+        elif check_snake_collide(board, new_head):
             move_score -= 100
         else:
             move_score += 1
@@ -67,6 +67,12 @@ def move_head(head, move):
 def check_out_of_bounds(board, head):
     if head.x < 0 or head.x >= board.width or head.y < 0 or head.y >= board.height:
         return True
+    return False
+
+def check_snake_collide(board, head):
+    for snake in board.snakes:
+        if head in snake.body:
+            return True
     return False
 
 def moved_away(head, new_head, body):
