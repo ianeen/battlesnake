@@ -6,7 +6,7 @@ import random
 def make_move(board, you):
     best_move = None
 
-    if you.health < 60:
+    if you.health < 66:
         best_move = find_best_next_space(board, you, True)
     else:
         best_move = find_best_next_space(board, you)
@@ -106,7 +106,7 @@ def move_from_close_bigger_snake(board, head, new_head, length):
         if abs(s.head.x - head.x) + abs(s.head.y - head.y) < abs(s.head.x - closest_snake.head.x) + abs(s.head.y - closest_snake.head.y):
             closest_snake = s
 
-    if closest_snake.length <= length:
+    if closest_snake.length < length:
         return False
 
     print ("Closest snake: " + str(closest_snake.length))
