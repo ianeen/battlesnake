@@ -41,6 +41,8 @@ def find_best_next_space(board, you, need_food=False):
                 move_score += 1
             if move_from_close_bigger_snake(board, you.head, new_head, you.length):
                 move_score += 1
+            if move_from_close_head(board, you.head, new_head, you.length):
+                move_score += 2
             if open_cells > 9:
                 move_score += 1
             elif open_cells < 5:
@@ -79,6 +81,27 @@ def check_snake_collide(board, head):
             return True
     return False
 
+def move_from_close_head(board, head, new_head, length):
+    closest_snake = None
+    for s in board.snakes:
+        if s.head == head:
+            continue
+
+        if closest_snake == None:
+            closest_snake = s
+            continue
+
+        if abs(s.head.x - head.x) + abs(s.head.y - head.y) < abs(closest_snake.head.x - head.x) + abs(closest_snake.head.y - head.y):
+            closest_snake = s
+
+    if closest_snake.length < length:
+        return False
+
+    if abs(new_head.x - closest_snake.head.x) > abs(head.x - closest_snake.head.x) or abs(new_head.y - closest_snake.head.y) > abs(head.y - closest_snake.head.y):
+        return True
+
+    return False
+
 def moved_away(head, new_head, body):
     average_x = 0
     average_y = 0
@@ -110,8 +133,6 @@ def move_from_close_bigger_snake(board, head, new_head, length):
 
     if closest_snake.length < length:
         return False
-
-    print ("Closest snake: " + str(closest_snake.length))
 
     average_x = 0
     average_y = 0
