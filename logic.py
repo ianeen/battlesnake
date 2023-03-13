@@ -20,21 +20,27 @@ def find_best_next_space(board, you, need_food=False):
     for move in ["up", "down", "left", "right"]:
         move_score = 0
         new_head = move_head(you.head, move)
+        new_body = you.body.copy()[1:]
 
-        print(new_head)
-        for b in you.body:
-            print(b)
+        # print(new_head)
+        # for b in new_body:
+        #     print(b)
 
-        if new_head in board.food and need_food:
-            move_score += 100
+        if new_head in board.food:
+            if new_body:
+                move_score += 100
+            else:
+                move_score -= 50
         elif new_head in board.hazards:
             move_score -= 100
-        elif new_head in you.body:
+        elif new_head in new_body:
             move_score -= 100
         elif check_out_of_bounds(board, new_head):
             move_score -= 100
         else:
             move_score += 1
+            if moved_away(you.head, new_head, you.body):
+                move_score += 1
 
         print(move + ": " + str(move_score))
 
@@ -61,4 +67,20 @@ def move_head(head, move):
 def check_out_of_bounds(board, head):
     if head.x < 0 or head.x >= board.width or head.y < 0 or head.y >= board.height:
         return True
+    return False
+
+def moved_away(head, new_head, body):
+    average_x = 0
+    average_y = 0
+    
+    for b in body:
+        average_x += b.x
+        average_y += b.y
+    
+    average_x /= len(body)
+    average_y /= len(body)
+
+    if abs(new_head.x - average_x) > abs(head.x - average_x) or abs(new_head.y - average_y) > abs(head.y - average_y):
+        return True
+
     return False
