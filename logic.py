@@ -118,7 +118,7 @@ def move_from_close_bigger_snake(board, head, new_head, length):
     average_y /= closest_snake.length
 
     print("Average: " + str(average_x) + ", " + str(average_y))
-    print("New head: " + str(new_head.x) + ", " + str(new_head.y)
+    print("New head: " + str(new_head.x) + ", " + str(new_head.y))
     print("Head: " + str(head.x) + ", " + str(head.y))
     
 
