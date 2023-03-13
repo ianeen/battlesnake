@@ -96,6 +96,9 @@ def moved_away(head, new_head, body):
 def move_from_close_bigger_snake(board, head, new_head, length):
     closest_snake = None
     for s in board.snakes:
+        if s.head == head:
+            continue
+
         if closest_snake == None:
             closest_snake = s
             continue
@@ -107,6 +110,7 @@ def move_from_close_bigger_snake(board, head, new_head, length):
         return False
 
     print ("Closest snake: " + str(closest_snake.length))
+    
     average_x = 0
     average_y = 0
     
@@ -116,12 +120,7 @@ def move_from_close_bigger_snake(board, head, new_head, length):
     
     average_x /= closest_snake.length
     average_y /= closest_snake.length
-
-    print("Average: " + str(average_x) + ", " + str(average_y))
-    print("New head: " + str(new_head.x) + ", " + str(new_head.y))
-    print("Head: " + str(head.x) + ", " + str(head.y))
     
-
     if abs(new_head.x - average_x) > abs(head.x - average_x) or abs(new_head.y - average_y) > abs(head.y - average_y):
         return True
 
