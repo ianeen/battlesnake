@@ -6,7 +6,7 @@ import random
 def make_move(board, you):
     best_move = None
 
-    if you.health < 50:
+    if you.health < 60:
         best_move = find_best_next_space(board, you, True)
     else:
         best_move = find_best_next_space(board, you)
