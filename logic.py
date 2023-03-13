@@ -41,6 +41,8 @@ def find_best_next_space(board, you, need_food=False):
             move_score += 1
             if moved_away(you.head, new_head, you.body):
                 move_score += 1
+            if move_from_close_bigger_snake(board, you.head, new_head, you.length):
+                move_score += 1
 
         print(move + ": " + str(move_score))
 
@@ -85,6 +87,34 @@ def moved_away(head, new_head, body):
     
     average_x /= len(body)
     average_y /= len(body)
+
+    if abs(new_head.x - average_x) > abs(head.x - average_x) or abs(new_head.y - average_y) > abs(head.y - average_y):
+        return True
+
+    return False
+
+def move_from_close_bigger_snake(board, head, new_head, length):
+    closest_snake = None
+    for s in board.snakes:
+        if closest_snake == None:
+            closest_snake = s
+            continue
+
+        if abs(s.head.x - head.x) + abs(s.head.y - head.y) < abs(s.head.x - closest_snake.head.x) + abs(s.head.y - closest_snake.head.y):
+            closest_snake = s
+
+    if closest_snake.length < length:
+        return False
+
+    average_x = 0
+    average_y = 0
+    
+    for b in closest_snake.body:
+        average_x += b.x
+        average_y += b.y
+    
+    average_x /= closest_snake.length
+    average_y /= closest_snake.length
 
     if abs(new_head.x - average_x) > abs(head.x - average_x) or abs(new_head.y - average_y) > abs(head.y - average_y):
         return True
