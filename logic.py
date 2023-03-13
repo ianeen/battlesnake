@@ -31,18 +31,20 @@ def find_best_next_space(board, you, need_food=False):
                 move_score += 100
             else:
                 move_score -= 1
-        elif new_head in new_body:
-            move_score -= 100
-        elif check_out_of_bounds(board, new_head):
-            move_score -= 100
-        elif check_snake_collide(board, new_head):
+        elif will_die(board, new_head, new_body):
             move_score -= 100
         else:
             move_score += 1
+            open_cells = get_possible_open_cells(board, you.head, you.body, move)
+
             if moved_away(you.head, new_head, you.body):
                 move_score += 1
             if move_from_close_bigger_snake(board, you.head, new_head, you.length):
                 move_score += 1
+            if open_cells > 9:
+                move_score += 1
+            elif open_cells < 5:
+                move_score -= 1
 
         print(move + ": " + str(move_score))
 
@@ -125,3 +127,40 @@ def move_from_close_bigger_snake(board, head, new_head, length):
         return True
 
     return False
+
+visited = []
+total = 0
+
+def will_die(board, new_head, new_body):
+    if new_head in new_body:
+        return True
+    elif check_out_of_bounds(board, new_head):
+        return True
+    elif check_snake_collide(board, new_head):
+        return True
+
+    return False
+
+def open_cells_recursive(board, head, body, direction):
+    global visited, total
+    new_head = move_head(head, direction)
+    new_body = body.copy()[1:]
+
+    if will_die(board, new_head, new_body) or total > 9 or new_head in visited:
+        return
+
+    visited.append(new_head)
+    total += 1
+
+    open_cells_recursive(board, new_head, new_body, "up")
+    open_cells_recursive(board, new_head, new_body, "down")
+    open_cells_recursive(board, new_head, new_body, "left")
+    open_cells_recursive(board, new_head, new_body, "right")
+
+    return total
+
+def get_possible_open_cells(board, head, body, direction):
+    global visited, total
+    visited = []
+    total = 0
+    return open_cells_recursive(board, head, body, direction)
