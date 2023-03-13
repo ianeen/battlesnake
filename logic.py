@@ -6,7 +6,7 @@ import random
 def make_move(board, you):
     best_move = None
 
-    if you.health < 66:
+    if you.health < 60:
         best_move = find_best_next_space(board, you, True)
     else:
         best_move = find_best_next_space(board, you)
@@ -39,6 +39,8 @@ def find_best_next_space(board, you, need_food=False):
 
             if moved_away(you.head, new_head, you.body):
                 move_score += 1
+            if need_food and move_to_food(board, you.head, new_head):
+                move_score += 2
             if move_from_close_bigger_snake(board, you.head, new_head, you.length):
                 move_score += 1
             if move_from_close_head(board, you.head, new_head, you.length):
@@ -98,6 +100,21 @@ def move_from_close_head(board, head, new_head, length):
         return False
 
     if abs(new_head.x - closest_snake.head.x) > abs(head.x - closest_snake.head.x) or abs(new_head.y - closest_snake.head.y) > abs(head.y - closest_snake.head.y):
+        return True
+
+    return False
+
+def move_to_food(board, head, new_head):
+    closest_food = None
+    for f in board.food:
+        if closest_food == None:
+            closest_food = f
+            continue
+
+        if abs(f.x - head.x) + abs(f.y - head.y) < abs(closest_food.x - head.x) + abs(closest_food.y - head.y):
+            closest_food = f
+
+    if abs(new_head.x - closest_food.x) < abs(head.x - closest_food.x) or abs(new_head.y - closest_food.y) < abs(head.y - closest_food.y):
         return True
 
     return False
