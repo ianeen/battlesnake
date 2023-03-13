@@ -27,7 +27,7 @@ def find_best_next_space(board, you, need_food=False):
         #     print(b)
 
         if new_head in board.food:
-            if new_body:
+            if need_food:
                 move_score += 100
             else:
                 move_score -= 50
