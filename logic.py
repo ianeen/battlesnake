@@ -15,7 +15,7 @@ def make_move(board, you):
 
 def find_best_next_space(board, you, need_food=False):
     best_move = None
-    best_move_score = 0
+    best_move_score = -99999
 
     for move in ["up", "down", "left", "right"]:
         move_score = 0
