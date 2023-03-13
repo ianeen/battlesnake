@@ -30,7 +30,7 @@ def find_best_next_space(board, you, need_food=False):
             if need_food:
                 move_score += 100
             else:
-                move_score -= 50
+                move_score -= 1
         elif new_head in new_body:
             move_score -= 100
         elif check_out_of_bounds(board, new_head):
