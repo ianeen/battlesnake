@@ -3,6 +3,7 @@
 import objects as battle_objects
 import random
 
+
 def make_move(board, you):
     best_move = None
 
@@ -12,6 +13,7 @@ def make_move(board, you):
         best_move = find_best_next_space(board, you)
 
     return best_move
+
 
 def find_best_next_space(board, you, need_food=False):
     best_move = None
@@ -62,6 +64,7 @@ def find_best_next_space(board, you, need_food=False):
 
     return best_move
 
+
 def move_head(head, move):
     if move == "up":
         return battle_objects.Coordinate(head.x, head.y + 1)
@@ -72,16 +75,19 @@ def move_head(head, move):
     elif move == "right":
         return battle_objects.Coordinate(head.x + 1, head.y)
 
+
 def check_out_of_bounds(board, head):
     if head.x < 0 or head.x >= board.width or head.y < 0 or head.y >= board.height:
         return True
     return False
+
 
 def check_snake_collide(board, head):
     for snake in board.snakes:
         if head in snake.body:
             return True
     return False
+
 
 def move_from_close_head(board, head, new_head, length):
     closest_snake = None
@@ -93,16 +99,21 @@ def move_from_close_head(board, head, new_head, length):
             closest_snake = s
             continue
 
-        if abs(s.head.x - head.x) + abs(s.head.y - head.y) < abs(closest_snake.head.x - head.x) + abs(closest_snake.head.y - head.y):
+        if abs(s.head.x - head.x) + abs(s.head.y - head.y) < abs(
+            closest_snake.head.x - head.x
+        ) + abs(closest_snake.head.y - head.y):
             closest_snake = s
 
     if closest_snake.length < length:
         return False
 
-    if abs(new_head.x - closest_snake.head.x) > abs(head.x - closest_snake.head.x) or abs(new_head.y - closest_snake.head.y) > abs(head.y - closest_snake.head.y):
+    if abs(new_head.x - closest_snake.head.x) > abs(
+        head.x - closest_snake.head.x
+    ) or abs(new_head.y - closest_snake.head.y) > abs(head.y - closest_snake.head.y):
         return True
 
     return False
+
 
 def move_to_food(board, head, new_head):
     closest_food = None
@@ -111,29 +122,37 @@ def move_to_food(board, head, new_head):
             closest_food = f
             continue
 
-        if abs(f.x - head.x) + abs(f.y - head.y) < abs(closest_food.x - head.x) + abs(closest_food.y - head.y):
+        if abs(f.x - head.x) + abs(f.y - head.y) < abs(closest_food.x - head.x) + abs(
+            closest_food.y - head.y
+        ):
             closest_food = f
 
-    if abs(new_head.x - closest_food.x) < abs(head.x - closest_food.x) or abs(new_head.y - closest_food.y) < abs(head.y - closest_food.y):
+    if abs(new_head.x - closest_food.x) < abs(head.x - closest_food.x) or abs(
+        new_head.y - closest_food.y
+    ) < abs(head.y - closest_food.y):
         return True
 
     return False
+
 
 def moved_away(head, new_head, body):
     average_x = 0
     average_y = 0
-    
+
     for b in body:
         average_x += b.x
         average_y += b.y
-    
+
     average_x /= len(body)
     average_y /= len(body)
 
-    if abs(new_head.x - average_x) > abs(head.x - average_x) or abs(new_head.y - average_y) > abs(head.y - average_y):
+    if abs(new_head.x - average_x) > abs(head.x - average_x) or abs(
+        new_head.y - average_y
+    ) > abs(head.y - average_y):
         return True
 
     return False
+
 
 def move_from_close_bigger_snake(board, head, new_head, length):
     closest_snake = None
@@ -145,7 +164,9 @@ def move_from_close_bigger_snake(board, head, new_head, length):
             closest_snake = s
             continue
 
-        if abs(s.head.x - head.x) + abs(s.head.y - head.y) < abs(closest_snake.head.x - head.x) + abs(closest_snake.head.y - head.y):
+        if abs(s.head.x - head.x) + abs(s.head.y - head.y) < abs(
+            closest_snake.head.x - head.x
+        ) + abs(closest_snake.head.y - head.y):
             closest_snake = s
 
     if closest_snake.length < length:
@@ -153,21 +174,25 @@ def move_from_close_bigger_snake(board, head, new_head, length):
 
     average_x = 0
     average_y = 0
-    
+
     for b in closest_snake.body:
         average_x += b.x
         average_y += b.y
-    
+
     average_x /= closest_snake.length
     average_y /= closest_snake.length
-    
-    if abs(new_head.x - average_x) > abs(head.x - average_x) or abs(new_head.y - average_y) > abs(head.y - average_y):
+
+    if abs(new_head.x - average_x) > abs(head.x - average_x) or abs(
+        new_head.y - average_y
+    ) > abs(head.y - average_y):
         return True
 
     return False
 
+
 visited = []
 total = 0
+
 
 def will_die(board, new_head, new_body):
     if new_head in new_body:
@@ -178,6 +203,7 @@ def will_die(board, new_head, new_body):
         return True
 
     return False
+
 
 def open_cells_recursive(board, head, body, direction):
     global visited, total
@@ -196,6 +222,7 @@ def open_cells_recursive(board, head, body, direction):
     open_cells_recursive(board, new_head, new_body, "right")
 
     return total
+
 
 def get_possible_open_cells(board, head, body, direction):
     global visited, total
